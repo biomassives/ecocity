@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ecocity OldSkool</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #00ff00;
+            font-family: "Courier New", monospace;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            cursor: crosshair;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #00ff00;
+            padding: 20px;
+        }
+        
+        .header {
+            animation: blink 1s infinite;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 36px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .row {
+            border: 1px dashed #00ff00;
+            margin-bottom: 30px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card {
+            border: 1px solid #00ff00;
+            margin: 10px;
+            padding: 15px;
+            background-color: #000000;
+            position: relative;
+            text-align: left;
+        }
+        
+        .card h3 {
+            color: #ffff00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        
+        .row-title {
+            background-color: #000000;
+            color: #ffff00;
+            display: inline-block;
+            padding: 5px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ffff00;
+        }
+        
+        .btn {
+            background-color: #000000;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background-color: #003333;
+            color: #ffffff;
+        }
+        
+        /* Old school animations */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            color: #ffff00;
+            margin: 20px 0;
+        }
+        
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+        
+        .spinner {
+            display: inline-block;
+            animation: spin 3s linear infinite;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000000;
+            border: 3px double #00ff00;
+            padding: 20px;
+            z-index: 100;
+            max-width: 80%;
+            text-align: left;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ff0000;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .underConstruction {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #ff0000;
+            transform: rotate(20deg);
+            border: 2px dashed #ff0000;
+            padding: 5px;
+        }
+        
+        .row:nth-child(2n) {
+            border-left: 10px solid #00ff00;
+        }
+        
+        .row:nth-child(2n+1) {
+            border-right: 10px solid #00ff00;
+        }
+        
+        .counter {
+            font-size: 12px;
+            margin-top: 30px;
+            color: #ff00ff;
+        }
+        
+        .hit-counter {
+            background-color: #333;
+            color: #ff00ff;
+            padding: 3px 8px;
+            border: 1px inset #666;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            width: 2px;
+            height: 2px;
+            opacity: 0.5;
+            animation: blink 1.5s infinite;
+        }
+        
+        .divider {
+            margin: 20px 0;
+            height: 10px;
+            background: repeating-linear-gradient(
+                90deg,
+                #00ff00,
+                #00ff00 10px,
+                transparent 10px,
+                transparent 20px
+            );
+        }
+        
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 8px;
+            line-height: 8px;
+            text-align: center;
+            color: #00ff00;
+            margin: 20px auto;
+        }
+        
+        .guestbook {
+            margin-top: 30px;
+            font-size: 14px;
+            border-top: 1px dashed #00ff00;
+            padding-top: 10px;
+        }
+        
+        .two-col {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        
+        .two-col .card {
+            flex: 1 1 40%;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starsContainer"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>HUB.APPROVIDEO.ORG</h1>
+            <div class="blink">*** WELCOME TO OUR SITE ***</div>
+            <div class="underConstruction">UNDER CONSTRUCTION</div>
+        </div>
+        
+        <div class="marquee">
+            <span class="marquee-text">*** SUSTAINABLE SOLUTIONS FOR A BETTER FUTURE *** CHECK OUT OUR NEW WATER PURIFICATION SYSTEM *** JOIN OUR MAILING LIST TODAY ***</span>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="ascii-art">
+          /\\\\\\\\\\      /\\\\\\\\\\      /\\\\\\\\\\
+         /\\\////////     /\\\\\\\\\\\\\   /\\\////////
+        /\\\//           /\\\///\\\///\\\ /\\\//
+        /\\\\\\\\\\\     \/\\\ \/\\\ \/\\\/\\\\\\\\\\
+        \///////////\\   \/\\\ \/\\\ \/\\\\///////////
+                   /\\   \/\\\ \/\\\ \/\\         /\\\
+          /\\\\\\\\\\/    \//\\\\\\ /\\\  /\\\\\\\\\/
+          \/////////       \///////\//   \/////////
+        </div>
+        
+        <!-- Row 1: Water Purification -->
+        <div class="row">
+            <div class="row-title">WATER PURIFICATION <span class="spinner">*</span></div>
+            <div class="card">
+                <h3>PURE WATER SOLUTIONS</h3>
+                <p>Our cutting-edge water purification systems provide clean water for communities worldwide. Using the latest technology to remove contaminants and ensure safe drinking water.</p>
+                <button class="btn" onclick="openModal('water-audio')">PLAY AUDIO <span class="blink">></span></button>
+                <button class="btn" onclick="openModal('water-video')">WATCH VIDEO <span class="blink">></span></button>
+            </div>
+        </div>
+        
+        <!-- Row 2: Fuel and Power -->
+        <div class="row">
+            <div class="row-title">ENERGY SOLUTIONS <span class="spinner">*</span></div>
+            <div class="two-col">
+                <div class="card">
+                    <h3>SUSTAINABLE FUEL</h3>
+                    <p>Eco-friendly fuel alternatives that reduce carbon emissions. Bio-based fuels for a cleaner planet.</p>
+                    <button class="btn" onclick="openModal('fuel-info')">MORE INFO <span class="blink">></span></button>
+                </div>
+                
+                <div class="card">
+                    <h3>CLEAN POWER</h3>
+                    <p>Renewable energy solutions for homes and businesses. Solar, wind, and hydroelectric systems.</p>
+                    <button class="btn" onclick="openModal('power-info')">MORE INFO <span class="blink">></span></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Row 3: Food and Public Health -->
+        <div class="row">
+            <div class="row-title">HEALTH & NUTRITION <span class="spinner">*</span></div>
+            <div class="two-col">
+                <div class="card">
+                    <h3>SUSTAINABLE FOOD</h3>
+                    <p>Organic farming practices and sustainable food production. Healthy food for healthy communities.</p>
+                    <button class="btn" onclick="openModal('food-info')">MORE INFO <span class="blink">></span></button>
+                </div>
+                
+                <div class="card">
+                    <h3>PUBLIC HEALTH</h3>
+                    <p>Initiatives to improve community health and wellbeing. Preventative care and health education.</p>
+                    <button class="btn" onclick="openModal('health-info')">MORE INFO <span class="blink">></span></button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="guestbook">
+            <div class="blink">*** SIGN OUR GUESTBOOK ***</div>
+            <button class="btn">SIGN NOW</button>
+        </div>
+        
+        <div class="counter">
+            YOU ARE VISITOR #<span class="hit-counter">000013</span> SINCE 1996
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div class="modal" id="water-audio-modal">
+        <button class="modal-close" onclick="closeModal('water-audio-modal')">X</button>
+        <h2>WATER PURIFICATION AUDIO</h2>
+        <p>[AUDIO PLAYER WOULD APPEAR HERE]</p>
+        <div class="blink">* NOW LOADING *</div>
+    </div>
+    
+    <div class="modal" id="water-video-modal">
+        <button class="modal-close" onclick="closeModal('water-video-modal')">X</button>
+        <h2>WATER PURIFICATION VIDEO</h2>
+        <p>[VIDEO PLAYER WOULD APPEAR HERE]</p>
+        <div class="blink">* BUFFERING *</div>
+    </div>
+    
+    <div class="modal" id="fuel-info-modal">
+        <button class="modal-close" onclick="closeModal('fuel-info-modal')">X</button>
+        <h2>SUSTAINABLE FUEL INFO</h2>
+        <p>Our sustainable fuel solutions include:</p>
+        <ul>
+            <li>Biodiesel production</li>
+            <li>Ethanol from agricultural waste</li>
+            <li>Hydrogen fuel cells</li>
+            <li>Carbon capture technology</li>
+        </ul>
+        <p>Contact us at: <span class="blink">fuel@approvideo.org</span></p>
+    </div>
+    
+    <div class="modal" id="power-info-modal">
+        <button class="modal-close" onclick="closeModal('power-info-modal')">X</button>
+        <h2>CLEAN POWER GENERATION</h2>
+        <p>Our clean power solutions focus on:</p>
+        <ul>
+            <li>Solar panel installation</li>
+            <li>Wind turbine setup</li>
+            <li>Micro-hydroelectric systems</li>
+            <li>Battery storage solutions</li>
+        </ul>
+        <p>Download our PDF brochure: <span class="blink">[DOWNLOAD]</span></p>
+    </div>
+    
+    <div class="modal" id="food-info-modal">
+        <button class="modal-close" onclick="closeModal('food-info-modal')">X</button>
+        <h2>SUSTAINABLE FOOD SYSTEMS</h2>
+        <p>Our sustainable food initiatives include:</p>
+        <ul>
+            <li>Organic farming techniques</li>
+            <li>Permaculture design</li>
+            <li>Seed saving networks</li>
+            <li>Community supported agriculture</li>
+        </ul>
+        <p>Next workshop: <span class="blink">MAY 15, 2025</span></p>
+    </div>
+    
+    <div class="modal" id="health-info-modal">
+        <button class="modal-close" onclick="closeModal('health-info-modal')">X</button>
+        <h2>PUBLIC HEALTH INITIATIVES</h2>
+        <p>Our public health programs include:</p>
+        <ul>
+            <li>Clean water access</li>
+            <li>Nutrition education</li>
+            <li>Mobile health clinics</li>
+            <li>Environmental monitoring</li>
+        </ul>
+        <p>Join our newsletter: <span class="blink">[SUBSCRIBE]</span></p>
+    </div>
+    
+    <script>
+        // Create stars for background
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const numStars = 100;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId + '-modal').style.display = 'block';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Simulate old school loading
+        function simulateLoading() {
+            const loadingText = document.createElement('div');
+            loadingText.innerHTML = 'LOADING...';
+            loadingText.style.position = 'fixed';
+            loadingText.style.top = '50%';
+            loadingText.style.left = '50%';
+            loadingText.style.transform = 'translate(-50%, -50%)';
+            loadingText.style.color = '#00ff00';
+            loadingText.style.fontSize = '24px';
+            loadingText.style.fontFamily = 'Courier New, monospace';
+            loadingText.style.animation = 'blink 1s infinite';
+            loadingText.style.backgroundColor = '#000000';
+            loadingText.style.padding = '20px';
+            loadingText.style.border = '2px solid #00ff00';
+            loadingText.style.zIndex = '1000';
+            
+            document.body.appendChild(loadingText);
+            
+            setTimeout(function() {
+                document.body.removeChild(loadingText);
+            }, 2000);
+        }
+        
+        // Simulate hit counter increment
+        function incrementCounter() {
+            const counter = document.querySelector('.hit-counter');
+            let count = parseInt(counter.innerText);
+            count++;
+            counter.innerText = count.toString().padStart(6, '0');
+        }
+        
+        // Initialize the page
+        window.onload = function() {
+            createStars();
+            simulateLoading();
+            incrementCounter();
+            
+            // Simulate slow loading images (old school web)
+            document.querySelectorAll('.card').forEach(function(card, index) {
+                setTimeout(function() {
+                    card.style.opacity = '0';
+                    setTimeout(function() {
+                        card.style.opacity = '1';
+                    }, 500);
+                }, index * 300);
+            });
+        };
+        
+        // Lattice method for data security (simulated)
+        class LatticeSecureData {
+            constructor() {
+                this.secureDataStoreInitialized = true;
+                console.log("Secure data store initialized using lattice method");
+            }
+            
+            encrypt(data) {
+                // Simulating encryption
+                return btoa(JSON.stringify(data));
+            }
+            
+            decrypt(encryptedData) {
+                // Simulating decryption
+                try {
+                    return JSON.parse(atob(encryptedData));
+                } catch (e) {
+                    console.error("Decryption failed");
+                    return null;
+                }
+            }
+        }
+        
+        // Initialize security
+        const securitySystem = new LatticeSecureData();
+    </script>
+</body>
+</html>
