@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ApproVideo OldSkool</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #000000;
+            color: #00ff00;
+            font-family: "Courier New", monospace;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            cursor: crosshair; /* Default retro cursor */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #00ff00;
+            padding: 20px;
+            position: relative; /* Needed for absolute positioning inside */
+        }
+
+        .header {
+            /* Keep the header blink from the first snippet */
+            /* animation: blink 1s infinite; */ /* Let's disable direct header blink, use JS for title effect */
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px #00ff00;
+            /* Add typewriter class for effect */
+            /* Will be controlled by JS */
+        }
+
+        .row {
+            border: 1px dashed #00ff00;
+            margin-bottom: 30px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card {
+            border: 1px solid #00ff00;
+            margin: 10px;
+            padding: 15px;
+            background-color: #000000;
+            position: relative;
+            text-align: left;
+            /* Add transition for potential effects */
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .card h3 {
+            color: #ffff00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: 0; /* Adjust spacing */
+        }
+
+        .row-title {
+            background-color: #000000;
+            color: #ffff00;
+            display: inline-block;
+            padding: 5px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ffff00;
+        }
+
+        .btn {
+            background-color: #000000;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer; /* Changed from default body cursor */
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, color 0.3s; /* Add transition */
+        }
+
+        .btn:hover {
+            background-color: #003333;
+            color: #ffffff;
+        }
+
+        /* Old school animations */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .marquee {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            color: #ffff00;
+            margin: 20px 0;
+            border-top: 1px solid #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding: 5px 0;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 20s linear infinite; /* Slowed down slightly */
+        }
+
+        .spinner {
+            display: inline-block;
+            animation: spin 3s linear infinite;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000000;
+            border: 3px double #00ff00;
+            padding: 30px; /* Increased padding */
+            z-index: 100;
+            max-width: 80%;
+            max-height: 80vh; /* Add max height */
+            overflow-y: auto; /* Allow scrolling */
+            text-align: left;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); /* Add subtle glow */
+        }
+
+        .modal h2 {
+            color: #ffff00;
+            text-align: center;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .modal ul {
+            list-style-type: square; /* More retro list style */
+            padding-left: 25px;
+        }
+
+        .modal li {
+            margin-bottom: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ff0000;
+            background: #000000; /* Ensure visibility */
+            border: 1px solid #ff0000;
+            font-size: 20px; /* Slightly smaller */
+            cursor: pointer; /* Use pointer cursor */
+            font-weight: bold;
+            padding: 2px 6px; /* Add padding */
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background-color: #ff0000;
+            color: #000000;
+        }
+
+
+        .underConstruction {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #ff0000;
+            transform: rotate(20deg);
+            border: 2px dashed #ff0000;
+            padding: 5px;
+            background-color: #000; /* Ensure visibility */
+        }
+
+        .row:nth-child(odd) { /* Adjusted for dynamic content */
+             border-right: 10px solid #00ff00;
+             border-left: 1px dashed #00ff00;
+        }
+
+        .row:nth-child(even) { /* Adjusted for dynamic content */
+             border-left: 10px solid #00ff00;
+             border-right: 1px dashed #00ff00;
+        }
+
+        .counter {
+            font-size: 12px;
+            margin-top: 30px;
+            color: #ff00ff;
+        }
+
+        .hit-counter {
+            background-color: #333;
+            color: #ff00ff;
+            padding: 3px 8px;
+            border: 1px inset #666;
+            letter-spacing: 3px;
+            font-weight: bold;
+            display: inline-block; /* Ensure proper display */
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none; /* Ensure stars don't interfere */
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%; /* Make stars round */
+            opacity: 0.5;
+            animation: blink 1.5s infinite;
+        }
+
+        .divider {
+            margin: 30px 0; /* Increased margin */
+            height: 10px;
+            background: repeating-linear-gradient(
+                90deg,
+                #00ff00,
+                #00ff00 10px,
+                transparent 10px,
+                transparent 20px
+            );
+        }
+
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 8px;
+            line-height: 8px;
+            text-align: center;
+            color: #00ff00;
+            margin: 30px auto; /* Increased margin */
+            overflow-x: auto; /* Allow horizontal scroll if needed */
+        }
+
+        .guestbook {
+            margin-top: 30px;
+            font-size: 14px;
+            border-top: 1px dashed #00ff00;
+            padding-top: 20px; /* Increased padding */
+        }
+
+        .two-col {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: -10px; /* Counteract card margin */
+        }
+
+        .two-col .card {
+            flex: 1 1 40%;
+            min-width: 200px;
+            margin: 10px; /* Consistent margin */
+        }
+
+        /* Icon navigation styles */
+        .icon-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px auto 30px; /* Adjusted margin */
+            max-width: 600px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .icon {
+            text-align: center;
+            cursor: pointer; /* Use pointer cursor */
+            transition: transform 0.3s ease;
+            padding: 5px; /* Add padding for easier clicking */
+            flex-basis: calc(100% / 6 - 10px); /* Distribute evenly */
+            min-width: 60px; /* Ensure minimum width */
+            margin-bottom: 10px; /* Space when wrapped */
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+        }
+
+        .icon.active .icon-circle {
+            border-color: #ffff00;
+            box-shadow: 0 0 15px #ffff00; /* Enhanced glow */
+            background-color: #333300; /* Highlight background */
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #000000;
+            border: 2px solid #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 5px;
+            font-size: 24px;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .icon-label {
+            color: #00ff00;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Loading screen styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease; /* For fade-out */
+        }
+
+        .loading-screen.fade-out {
+             opacity: 0;
+             pointer-events: none;
+        }
+
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-text {
+            color: #00ff00;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: "Courier New", monospace;
+            min-height: 30px; /* Prevent layout shift */
+        }
+
+        .loading-cursor {
+            display: inline-block;
+            color: #00ff00;
+            font-size: 24px;
+            /* Blinking handled by JS */
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 20px;
+            border: 2px solid #00ff00;
+            margin: 20px auto;
+            overflow: hidden;
+            background-color: #111; /* Add background */
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: #00ff00;
+            transition: width 1.5s linear; /* Default transition */
+        }
+
+        /* Help screen and system dialogs */
+        .help-modal, .system-error-modal, .reset-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000000;
+            color: #00ff00;
+            padding: 20px 30px; /* Adjusted padding */
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            font-family: "Courier New", monospace;
+            z-index: 2000;
+            max-width: 80%;
+            text-align: left; /* Default text align */
+        }
+         .help-modal h2, .system-error-modal h2, .reset-modal h2 {
+             text-align: center;
+             color: #ffff00;
+             margin-top: 0;
+             margin-bottom: 15px;
+         }
+         .help-modal ul, .system-error-modal ul, .reset-modal ul {
+             padding-left: 20px;
+             list-style-type: '* '; /* Retro list style */
+         }
+         .help-modal li, .system-error-modal li, .reset-modal li {
+             margin-bottom: 5px;
+         }
+
+        .system-error-modal {
+            background-color: #000066; /* BSOD blue */
+            color: #ffffff;
+            border-color: #ffffff;
+            text-align: center;
+        }
+         .system-error-modal h2 {
+             color: #ffff00;
+             animation: blink 0.8s infinite;
+         }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+             h1 {
+                 font-size: 28px;
+             }
+             .icon-container {
+                 max-width: 90%;
+             }
+             .icon {
+                 flex-basis: calc(100% / 3 - 10px); /* 3 icons per row */
+             }
+            .two-col .card {
+                flex-basis: 100%; /* Stack cards */
+                min-width: unset;
+            }
+            .modal {
+                max-width: 90%;
+                padding: 20px;
+            }
+            .help-modal, .system-error-modal, .reset-modal {
+                max-width: 90%;
+                padding: 15px 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="stars" id="starsContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>HUB.APPROVIDEO.ORG</h1>
+            <div class="blink">*** WELCOME TO OUR SITE ***</div>
+            <div class="underConstruction">UNDER CONSTRUCTION</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="icon active" id="icon-shelter" data-page="shelter">
+                <div class="icon-circle">🏠</div>
+                <div class="icon-label">Shelter</div>
+            </div>
+            <div class="icon" id="icon-water" data-page="water">
+                <div class="icon-circle">💧</div>
+                <div class="icon-label">Water</div>
+            </div>
+            <div class="icon" id="icon-waste" data-page="waste">
+                <div class="icon-circle">♻️</div>
+                <div class="icon-label">Waste</div>
+            </div>
+            <div class="icon" id="icon-energy" data-page="energy">
+                <div class="icon-circle">🔆</div>
+                <div class="icon-label">Energy</div>
+            </div>
+            <div class="icon" id="icon-health" data-page="health">
+                <div class="icon-circle">❤️</div>
+                <div class="icon-label">Health</div>
+            </div>
+            <div class="icon" id="icon-food" data-page="food">
+                <div class="icon-circle">🍴</div>
+                <div class="icon-label">Food</div>
+            </div>
+        </div>
+
+        <div class="marquee">
+            <span class="marquee-text">*** SUSTAINABLE SOLUTIONS FOR A BETTER FUTURE *** CHECK OUT OUR NEW WATER PURIFICATION SYSTEM *** JOIN OUR MAILING LIST TODAY *** POWERED BY APPROPRIATE TECHNOLOGY ***</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ascii-art">
+            A P P R O V I D E O . O R G
+  /\\\\\\\\\\        /\\\\\\\\\\        /\\\\\\\\\\
+ /\\\////////       /\\\\\\\\\\\\\      /\\\////////
+/\\\//             /\\\///\\\///\\\    /\\\//
+/\\\\\\\\\\\       \\/\\\ \\/\\\ \\/\\  /\\\\\\\\\\
+\\///////////\\    \\/\\\ \\/\\\ \\/\\  \\///////////
+         /\\\      \\/\\\ \\/\\\ \\/\\           /\\\
+ /\\\\\\\\\\/       \\//\\\\\\ /\\\     /\\\\\\\\\\/
+ \/////////         \///////\//       \/////////
+        </div>
+
+        <div id="page-content-area">
+            </div>
+
+
+        <div class="divider"></div>
+
+        <div class="guestbook">
+            <div class="blink">*** SIGN OUR GUESTBOOK ***</div>
+            <button class="btn" onclick="showGuestbookForm()">SIGN NOW</button>
+            </div>
+
+        <div class="counter">
+            YOU ARE VISITOR #<span class="hit-counter">000013</span> SINCE 1996
+        </div>
+    </div>
+
+    <script>
+        // Page content for each section
+        const pageContent = {
+            shelter: {
+                title: "SHELTER SOLUTIONS",
+                content: `
+                <div class="row">
+                    <div class="row-title">DIY SHELTER <span class="spinner">*</span></div>
+                    <div class="two-col">
+                        <div class="card">
+                            <h3>EMERGENCY SHELTER</h3>
+                            <p>Learn how to build emergency shelters from common materials. Ideal for disaster preparation or outdoor survival.</p>
+                            <button class="btn" onclick="openModal('shelter-video')">WATCH VIDEO <span class="blink">></span></button>
+                        </div>
+                        <div class="card">
+                            <h3>TINY HOUSE BUILDING</h3>
+                            <p>Step-by-step guide to building your own tiny house using reclaimed materials and simple tools.</p>
+                            <button class="btn" onclick="openModal('tiny-house')">MORE INFO <span class="blink">></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">COMMUNITY BUILDING <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>COMMUNITY SHELTER PROJECTS</h3>
+                        <p>Organize community efforts to build shelters for those in need. Templates for planning meetings and volunteer coordination.</p>
+                        <button class="btn" onclick="openModal('community-shelter')">DOWNLOAD GUIDE <span class="blink">></span></button>
+                    </div>
+                </div>
+                `
+            },
+            water: {
+                title: "WATER PURIFICATION",
+                content: `
+                <div class="row">
+                    <div class="row-title">WATER PURIFICATION <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>SAFE WATER SOLUTION CHALLENGE</h3>
+                        <p>A fun clinic where we build safe, reliable evaporative drinking water procurement systems with simple materials.</p>
+                        <button class="btn" onclick="openModal('water-audio')">PLAY AUDIO <span class="blink">></span></button>
+                        <button class="btn" onclick="openModal('water-video')">WATCH VIDEO <span class="blink">></span></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">ADVANCED FILTRATION <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>DIY WATER FILTERS</h3>
+                        <p>Learn how to create multi-stage water filters using sand, charcoal, and other commonly available materials.</p>
+                        <button class="btn" onclick="openModal('filter-guide')">VIEW GUIDE <span class="blink">></span></button>
+                    </div>
+                </div>
+                `
+            },
+            waste: {
+                title: "WASTE MANAGEMENT",
+                content: `
+                <div class="row">
+                    <div class="row-title">COMPOSTING SYSTEMS <span class="spinner">*</span></div>
+                    <div class="two-col">
+                        <div class="card">
+                            <h3>URBAN COMPOSTING</h3>
+                            <p>Small-space composting solutions for apartment dwellers and urban residents with limited outdoor space.</p>
+                            <button class="btn" onclick="openModal('urban-compost')">LEARN MORE <span class="blink">></span></button>
+                        </div>
+                        <div class="card">
+                            <h3>LARGE SCALE SYSTEMS</h3>
+                            <p>Community-level composting systems. Designs and organizational methods for neighborhood waste reduction.</p>
+                            <button class="btn" onclick="openModal('community-compost')">VIEW PLANS <span class="blink">></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">UPCYCLING PROJECTS <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>CREATIVE REUSE</h3>
+                        <p>Turn "waste" materials into useful items. Includes plastic bottle greenhouses, can stoves, and more.</p>
+                        <button class="btn" onclick="openModal('upcycle-ideas')">GET IDEAS <span class="blink">></span></button>
+                    </div>
+                </div>
+                `
+            },
+            energy: {
+                title: "ENERGY SOLUTIONS",
+                content: `
+                <div class="row">
+                    <div class="row-title">EFFICIENT COOKING <span class="spinner">*</span></div>
+                    <div class="two-col">
+                        <div class="card">
+                            <h3>DIY ROCKET STOVE CLINIC</h3>
+                            <p>Cooking and heating quality Rocket Stoves can be fashioned from cooking cans. Compatible with hand made fuel briquettes.</p>
+                            <button class="btn" onclick="openModal('fuel-info')">MORE INFO <span class="blink">></span></button>
+                        </div>
+                        <div class="card">
+                            <h3>SOLAR COOKERS</h3>
+                            <p>Build simple solar cookers to harness the sun's energy for cooking food without fuel.</p>
+                            <button class="btn" onclick="openModal('solar-cooker')">GET PLANS <span class="blink">></span></button>
+                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">RENEWABLE POWER <span class="spinner">*</span></div>
+                     <div class="two-col">
+                        <div class="card">
+                            <h3>CLEAN POWER</h3>
+                            <p>Renewable energy solutions for homes and communities. Solar, wind, and micro-hydroelectric systems.</p>
+                            <button class="btn" onclick="openModal('power-info')">MORE INFO <span class="blink">></span></button>
+                        </div>
+                        <div class="card">
+                            <h3>DIY SOLAR COLLECTORS</h3>
+                            <p>Build your own solar water heaters and passive heat collectors using recycled materials.</p>
+                            <button class="btn" onclick="openModal('solar-plans')">GET PLANS <span class="blink">></span></button>
+                        </div>
+                    </div>
+                </div>
+                `
+            },
+            health: {
+                title: "HEALTH & WELLNESS",
+                content: `
+                <div class="row">
+                    <div class="row-title">PUBLIC HEALTH <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>COMMUNITY HEALTH INITIATIVES</h3>
+                        <p>Tips and best practices for minimizing incidence of infectious and communicable disease through sanitation and hygiene.</p>
+                        <button class="btn" onclick="openModal('health-info')">MORE INFO <span class="blink">></span></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">FIRST AID <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>EMERGENCY RESPONSE</h3>
+                        <p>Basic first aid techniques for emergency situations when professional help is not immediately available.</p>
+                        <button class="btn" onclick="openModal('first-aid')">LEARN NOW <span class="blink">></span></button>
+                    </div>
+                </div>
+                `
+            },
+            food: {
+                title: "FOOD PRODUCTION",
+                content: `
+                 <div class="row">
+                    <div class="row-title">SUSTAINABLE FOOD <span class="spinner">*</span></div>
+                    <div class="card">
+                         <h3>FOOD SECURITY STRATEGIES</h3>
+                         <p>Creative community level responses and remediation for food security in a fast-food world. Focus on local, sustainable options.</p>
+                         <button class="btn" onclick="openModal('food-info')">MORE INFO <span class="blink">></span></button>
+                     </div>
+                 </div>
+                <div class="row">
+                    <div class="row-title">URBAN FARMING <span class="spinner">*</span></div>
+                    <div class="two-col">
+                        <div class="card">
+                            <h3>CONTAINER GARDENING</h3>
+                            <p>Grow nutritious food in small spaces using containers and vertical gardening techniques.</p>
+                            <button class="btn" onclick="openModal('container-guide')">VIEW GUIDE <span class="blink">></span></button>
+                        </div>
+                        <div class="card">
+                            <h3>HYDROPONICS BASICS</h3>
+                            <p>Simple DIY hydroponic systems for growing vegetables without soil, perfect for indoor growing.</p>
+                            <button class="btn" onclick="openModal('hydroponics')">WATCH DEMO <span class="blink">></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-title">FOOD PRESERVATION <span class="spinner">*</span></div>
+                    <div class="card">
+                        <h3>LOW-TECH PRESERVATION</h3>
+                        <p>Methods for preserving food without electricity: drying, fermenting, canning, and root cellaring.</p>
+                        <button class="btn" onclick="openModal('preservation')">LEARN METHODS <span class="blink">></span></button>
+                    </div>
+                </div>
+                `
+            }
+        };
+
+        // Modal content for various buttons
+        const modalContent = {
+            'shelter-video': {
+                title: 'EMERGENCY SHELTER VIDEOS',
+                content: `
+                <p>[VIDEO PLAYER WOULD APPEAR HERE]</p>
+                <p>This video series shows how to construct emergency shelters using:</p>
+                <ul><li>Tarps and paracord</li><li>Natural materials (forest debris)</li><li>Urban scavenged materials</li></ul>
+                <div class="blink">* BUFFERING *</div>`
+            },
+            'tiny-house': {
+                title: 'TINY HOUSE BUILDING GUIDE',
+                content: `
+                <p>Our DIY tiny house guide includes:</p>
+                <ul><li>Foundation options</li><li>Framing with reclaimed lumber</li><li>Off-grid systems (solar, water)</li><li>Space-saving furniture designs</li></ul>
+                <p>Next workshop: <span class="blink">JUNE 10, 2025</span></p>`
+            },
+            'community-shelter': {
+                title: 'COMMUNITY SHELTER PROJECTS',
+                content: `
+                <p>Download our community organizing toolkit:</p>
+                <ul><li>Meeting templates</li><li>Volunteer coordination forms</li><li>Material donation tracking</li><li>Building plans for group shelters</li></ul>
+                <p>Download PDF: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+            'water-audio': {
+                title: 'WATER PURIFICATION AUDIO',
+                content: `
+                <p>[AUDIO PLAYER WOULD APPEAR HERE]</p>
+                <p>This audio guide covers the principles of water purification and step-by-step instructions for building a simple solar still.</p>
+                <div class="blink">* NOW LOADING *</div>`
+            },
+            'water-video': {
+                title: 'WATER PURIFICATION VIDEO',
+                content: `
+                <p>[VIDEO PLAYER WOULD APPEAR HERE]</p>
+                <p>This video demonstrates how to build a multi-stage water filter using locally available materials like sand and charcoal.</p>
+                <div class="blink">* BUFFERING *</div>`
+            },
+            'filter-guide': {
+                title: 'DIY WATER FILTERS GUIDE',
+                content: `
+                <p>Our advanced filtration guide includes:</p>
+                <ul><li>Ceramic filter construction</li><li>Activated charcoal production</li><li>Slow sand filtration systems</li><li>Testing methods for water quality</li></ul>
+                <p>Download manual: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+             'urban-compost': {
+                title: 'URBAN COMPOSTING TECHNIQUES',
+                content: `
+                <p>Small-space composting solutions:</p>
+                <ul><li>Bokashi fermentation systems</li><li>Worm bins (vermiculture) for apartments</li><li>Balcony composting options</li><li>Odor management techniques</li></ul>
+                <p>Next online class: <span class="blink">MAY 22, 2025</span></p>`
+            },
+            'community-compost': {
+                title: 'COMMUNITY COMPOSTING PLANS',
+                content: `
+                <p>Large-scale composting resources:</p>
+                <ul><li>Three-bin system designs</li><li>Volunteer rotation schedules</li><li>Temperature monitoring & turning</li><li>Municipal partnership templates</li></ul>
+                <p>Download plans: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+            'upcycle-ideas': {
+                title: 'CREATIVE REUSE PROJECTS',
+                content: `
+                <p>Popular upcycling projects:</p>
+                <ul><li>Plastic bottle greenhouse</li><li>Pallet furniture designs</li><li>Tire garden planters</li><li>Can and bottle brick construction</li></ul>
+                <p>View project gallery: <span class="blink">[VIEW]</span></p>`
+            },
+            'fuel-info': {
+                title: 'ROCKET STOVE & FUEL INFO',
+                content: `
+                <p>Rocket stoves offer efficient wood combustion for cooking and heating.</p>
+                <ul><li>Rocket stove design principles</li><li>Building guide using tin cans</li><li>Making paper/biomass briquettes</li><li>Safety considerations</li></ul>
+                <p>Contact us at: <span class="blink">fuel@approvideo.org</span></p>`
+            },
+             'solar-cooker': {
+                 title: 'SOLAR COOKER PLANS',
+                 content: `
+                 <p>Harness the sun for cooking! Plans include:</p>
+                 <ul><li>Simple box cooker design</li><li>Parabolic cooker principles</li><li>Materials list (mostly recycled)</li><li>Tips for effective solar cooking</li></ul>
+                 <p>View plans: <span class="blink">[VIEW]</span></p>`
+             },
+            'power-info': {
+                title: 'CLEAN POWER GENERATION',
+                content: `
+                <p>Our clean power solutions focus on:</p>
+                <ul><li>Solar panel installation basics</li><li>Small wind turbine setup guide</li><li>Micro-hydroelectric systems potential</li><li>Battery storage solutions</li></ul>
+                <p>Download our PDF brochure: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+            'solar-plans': {
+                title: 'DIY SOLAR COLLECTOR PLANS',
+                content: `
+                <p>Solar thermal collector plans include:</p>
+                <ul><li>Pop can air heaters</li><li>Batch water heating panels</li><li>Passive solar window boxes</li><li>Solar food dehydrators</li></ul>
+                <p>View detailed plans: <span class="blink">[VIEW]</span></p>`
+            },
+             'health-info': {
+                title: 'PUBLIC HEALTH INITIATIVES',
+                content: `
+                <p>Our public health programs include:</p>
+                <ul><li>Clean water access advocacy</li><li>Sanitation & hygiene education</li><li>Nutrition awareness campaigns</li><li>Environmental monitoring info</li></ul>
+                <p>Join our newsletter: <span class="blink">[SUBSCRIBE]</span></p>`
+            },
+            'first-aid': {
+                title: 'EMERGENCY FIRST AID',
+                content: `
+                <p>First aid training resources:</p>
+                <ul><li>Wound care basics</li><li>Improvised medical supplies</li><li>CPR instruction overview</li><li>Emergency response coordination tips</li></ul>
+                <p>Download emergency guide: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+             'food-info': {
+                title: 'SUSTAINABLE FOOD SYSTEMS',
+                content: `
+                <p>Our sustainable food initiatives include:</p>
+                <ul><li>Organic farming techniques</li><li>Permaculture design principles</li><li>Seed saving networks</li><li>Community supported agriculture (CSA) info</li></ul>
+                <p>Next workshop: <span class="blink">JULY 15, 2025</span></p>`
+            },
+            'container-guide': {
+                title: 'CONTAINER GARDENING GUIDE',
+                content: `
+                <p>Container gardening resources:</p>
+                <ul><li>Self-watering container designs</li><li>Vertical growing systems (pallet, bottle towers)</li><li>Companion planting guides</li><li>Urban-friendly crop varieties</li></ul>
+                <p>Download growing calendar: <span class="blink">[DOWNLOAD]</span></p>`
+            },
+            'hydroponics': {
+                title: 'DIY HYDROPONICS DEMO',
+                content: `
+                <p>Hydroponic system tutorials:</p>
+                <ul><li>Simple Kratky method jars</li><li>Window farm vertical systems</li><li>Nutrient mixing guidelines</li><li>Basic PVC pipe NFT systems</li></ul>
+                <p>Watch demonstration: <span class="blink">[PLAY VIDEO]</span></p>`
+            },
+            'preservation': {
+                title: 'FOOD PRESERVATION METHODS',
+                content: `
+                <p>Low-tech preservation techniques:</p>
+                <ul><li>Solar dehydrator plans</li><li>Lacto-fermentation basics (sauerkraut, kimchi)</li><li>Water bath canning essentials</li><li>Root cellar design principles</li></ul>
+                <p>Seasonal preservation calendar: <span class="blink">[VIEW]</span></p>`
+            }
+        };
+
+        // ---- Core JavaScript ----
+
+        // Modal functions
+        function openModal(modalId) {
+             // Close any existing modals first
+             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+
+            // Check if modal element exists, if not create it
+            let modal = document.getElementById(`${modalId}-modal`);
+
+            if (!modal) {
+                // Create the modal if it doesn't exist
+                modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.id = `${modalId}-modal`;
+
+                const content = modalContent[modalId] || {
+                    title: 'INFORMATION',
+                    content: '<p>Content coming soon... <span class="blink">UNDER CONSTRUCTION</span></p>'
+                };
+
+                modal.innerHTML = `
+                    <button class="modal-close" onclick="closeModal('${modalId}-modal')">X</button>
+                    <h2>${content.title}</h2>
+                    ${content.content}
+                `;
+
+                document.body.appendChild(modal);
+            }
+
+            modal.style.display = 'block';
+            playRetroSound('open'); // Play sound on open
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                 modal.style.display = 'none';
+                 playRetroSound('close'); // Play sound on close
+            }
+        }
+
+        // Play retro computer sound (modified for context)
+        function playRetroSound(type = 'interaction') {
+             // Only play if Web Audio API is supported
+            if (window.AudioContext || window.webkitAudioContext) {
+                 try {
+                     const AudioContext = window.AudioContext || window.webkitAudioContext;
+                     const audioCtx = new AudioContext();
+                     const oscillator = audioCtx.createOscillator();
+                     const gainNode = audioCtx.createGain();
+
+                     oscillator.connect(gainNode);
+                     gainNode.connect(audioCtx.destination);
+
+                     gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); // Reduced volume
+
+                     if (type === 'open') {
+                         // Short ascending beep for open
+                         oscillator.type = 'square';
+                         oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                         oscillator.frequency.linearRampToValueAtTime(660, audioCtx.currentTime + 0.1);
+                         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                         oscillator.start();
+                         oscillator.stop(audioCtx.currentTime + 0.15);
+                     } else if (type === 'close') {
+                         // Short descending beep for close
+                          oscillator.type = 'sawtooth';
+                         oscillator.frequency.setValueAtTime(660, audioCtx.currentTime);
+                         oscillator.frequency.linearRampToValueAtTime(440, audioCtx.currentTime + 0.1);
+                         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                         oscillator.start();
+                         oscillator.stop(audioCtx.currentTime + 0.15);
+                     } else {
+                         // Default interaction beep
+                          oscillator.type = 'square';
+                         oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Higher pitch beep
+                         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); // Shorter duration
+                         oscillator.start();
+                         oscillator.stop(audioCtx.currentTime + 0.1);
+                     }
+
+                    // Clean up context after sound plays
+                    setTimeout(() => { if (audioCtx.state !== 'closed') audioCtx.close(); }, 500);
+
+                } catch (e) {
+                    console.error("Audio playback error:", e);
+                }
+            }
+        }
+
+        // Placeholder for guestbook form
+        function showGuestbookForm() {
+            openModal('guestbook-form'); // Define 'guestbook-form' in modalContent if needed
+             // Example modal content:
+             if (!modalContent['guestbook-form']) {
+                 modalContent['guestbook-form'] = {
+                     title: 'SIGN OUR GUESTBOOK',
+                     content: `
+                         <p>Guestbook feature coming soon!</p>
+                         <p>Name: <input type="text" style="background:#333; color:#0f0; border:1px solid #0f0;"></p>
+                         <p>Message: <textarea style="background:#333; color:#0f0; border:1px solid #0f0; width: 90%; height: 60px;"></textarea></p>
+                         <button class="btn" onclick="closeModal('guestbook-form')">SUBMIT</button>
+                     `
+                 };
+             }
+        }
+
+    </script>
+
+    <script>
+        // Lattice Method Security Implementation (Simplified for Demo)
+        class LatticeSecureData {
+            constructor() {
+                this.secureDataStoreInitialized = true;
+                // In a real scenario, this key/matrix would be more complex and managed securely
+                this.key = 137;
+                console.log("Secure data store initialized (Demo)");
+            }
+
+            // Simple XOR-based transformation for demonstration
+            applyLatticeTransformation(input) {
+                 let result = '';
+                 for (let i = 0; i < input.length; i++) {
+                     result += String.fromCharCode(input.charCodeAt(i) ^ this.key);
+                 }
+                 return result;
+             }
+
+             reverseLatticeTransformation(input) {
+                 // XORing again with the same key reverses the process
+                 return this.applyLatticeTransformation(input);
+             }
+
+
+            // Encrypt data using lattice method
+            encrypt(data) {
+                try {
+                    const jsonData = JSON.stringify(data);
+                    let base64Encoded = btoa(unescape(encodeURIComponent(jsonData))); // Handle UTF-8
+                    let transformedData = this.applyLatticeTransformation(base64Encoded);
+                    return transformedData; // Simplified: just returning transformed data for demo
+                 } catch (e) {
+                     console.error("Encryption failed:", e);
+                     return null;
+                 }
+            }
+
+            // Decrypt data encrypted with lattice method
+            decrypt(encryptedData) {
+                try {
+                     let reversedTransform = this.reverseLatticeTransformation(encryptedData);
+                     const jsonData = decodeURIComponent(escape(atob(reversedTransform))); // Handle UTF-8
+                     return JSON.parse(jsonData);
+                 } catch (e) {
+                     console.error("Decryption failed:", e);
+                     return null; // Return null or throw error
+                 }
+            }
+        }
+    </script>
+
+    <script>
+        // OldSkool Transition Effect
+        class OldSkoolTransitionEffect {
+            constructor(options = {}) {
+                this.options = {
+                    typingSpeed: options.typingSpeed || 80,
+                    loadingDuration: options.loadingDuration || 1800,
+                    cursorBlinkRate: options.cursorBlinkRate || 500,
+                    typingSoundEnabled: options.typingSoundEnabled !== false,
+                    loadingSoundEnabled: options.loadingSoundEnabled !== false
+                };
+
+                this.loadingScreen = null;
+                this.loadingText = null;
+                this.cursor = null;
+                this.progressBar = null;
+
+                this.isLoading = false;
+                this.cursorInterval = null;
+                this.typingInterval = null;
+                this.currentTypingSound = null; // Track typing sound oscillator
+
+                this.audioCtx = null;
+                 try {
+                     if (window.AudioContext || window.webkitAudioContext) {
+                         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                     }
+                 } catch (e) {
+                     console.error("Web Audio API not supported or failed to initialize:", e);
+                     this.audioCtx = null; // Ensure it's null if failed
+                 }
+            }
+
+            startTransition(callback, customText) {
+                if (this.isLoading) return;
+                this.isLoading = true;
+
+                this.createLoadingScreen();
+
+                if (this.options.loadingSoundEnabled) {
+                    this.playLoadingSound();
+                }
+
+                this.animateCursor();
+                this.typeLoadingText(customText);
+                this.animateProgressBar();
+
+                // Ensure transition completes even if typing is fast/slow
+                setTimeout(() => {
+                     // Only complete if still loading (prevents double completion)
+                     if(this.isLoading) {
+                        this.completeTransition(callback);
+                     }
+                }, this.options.loadingDuration);
+            }
+
+            createLoadingScreen() {
+                // Remove existing one if any (shouldn't happen with isLoading flag, but good practice)
+                 if (this.loadingScreen && this.loadingScreen.parentNode) {
+                     this.loadingScreen.parentNode.removeChild(this.loadingScreen);
+                 }
+
+                this.loadingScreen = document.createElement('div');
+                this.loadingScreen.className = 'loading-screen';
+
+                const loadingContent = document.createElement('div');
+                loadingContent.className = 'loading-content';
+
+                this.loadingText = document.createElement('div');
+                this.loadingText.className = 'loading-text';
+
+                this.cursor = document.createElement('span'); // Use span for inline behavior
+                this.cursor.className = 'loading-cursor';
+                this.cursor.textContent = '_';
+
+                const progressContainer = document.createElement('div');
+                progressContainer.className = 'loading-progress';
+
+                this.progressBar = document.createElement('div');
+                this.progressBar.className = 'progress-bar';
+
+                progressContainer.appendChild(this.progressBar);
+                // Append cursor after text
+                loadingContent.appendChild(this.loadingText);
+                loadingContent.appendChild(this.cursor);
+                loadingContent.appendChild(progressContainer);
+                this.loadingScreen.appendChild(loadingContent);
+
+                document.body.appendChild(this.loadingScreen);
+            }
+
+             animateCursor() {
+                 // Clear existing interval
+                 if (this.cursorInterval) clearInterval(this.cursorInterval);
+
+                 let visible = true;
+                 if (this.cursor) this.cursor.style.visibility = 'visible'; // Ensure starts visible
+
+                 this.cursorInterval = setInterval(() => {
+                     if (!this.cursor) {
+                         clearInterval(this.cursorInterval);
+                         return;
+                     }
+                     visible = !visible;
+                     this.cursor.style.visibility = visible ? 'visible' : 'hidden';
+                 }, this.options.cursorBlinkRate);
+             }
+
+
+            typeLoadingText(customText) {
+                 // Clear existing interval
+                 if (this.typingInterval) clearInterval(this.typingInterval);
+                 // Stop any ongoing typing sound
+                 if (this.currentTypingSound) this.currentTypingSound.stop();
+
+
+                const textOptions = [
+                    'ACCESSING DATA...', 'FETCHING CONTENT...', 'PLEASE WAIT...',
+                    'BUFFERING...', 'LOADING GRAPHICS...', 'INITIALIZING...',
+                    'CONNECTING TO HUB...', 'DECOMPRESSING FILES...', 'SYSTEM READY...'
+                ];
+                const textToType = customText || textOptions[Math.floor(Math.random() * textOptions.length)];
+
+                let currentIndex = 0;
+                if (this.loadingText) this.loadingText.textContent = ''; // Clear previous text
+
+                this.typingInterval = setInterval(() => {
+                    if (!this.loadingText || !this.cursor) { // Check if elements still exist
+                        clearInterval(this.typingInterval);
+                        if (this.currentTypingSound) this.currentTypingSound.stop();
+                        return;
+                    }
+
+                    if (currentIndex >= textToType.length) {
+                         clearInterval(this.typingInterval);
+                         if (this.currentTypingSound) this.currentTypingSound.stop();
+                         // Optional: Keep cursor blinking or hide it
+                         // if(this.cursor) this.cursor.style.visibility = 'hidden';
+                         // if(this.cursorInterval) clearInterval(this.cursorInterval);
+                         return;
+                    }
+
+                    this.loadingText.textContent += textToType[currentIndex];
+                    currentIndex++;
+
+                    if (this.options.typingSoundEnabled) {
+                        this.playTypingSound();
+                    }
+                }, this.options.typingSpeed);
+            }
+
+             animateProgressBar() {
+                 if (!this.progressBar) return;
+
+                 // Reset width before starting
+                 this.progressBar.style.transition = 'none'; // Disable transition for reset
+                 this.progressBar.style.width = '0%';
+
+                 // Force reflow/repaint
+                 void this.progressBar.offsetWidth;
+
+                 // Set transition duration and start animation
+                 this.progressBar.style.transition = `width ${this.options.loadingDuration * 0.9}ms linear`; // Make slightly faster than overall duration
+                 this.progressBar.style.width = '100%';
+             }
+
+
+            completeTransition(callback) {
+                 if (!this.isLoading) return; // Prevent double completion
+
+                 // Clear intervals immediately
+                 if (this.cursorInterval) clearInterval(this.cursorInterval);
+                 if (this.typingInterval) clearInterval(this.typingInterval);
+                 this.cursorInterval = null;
+                 this.typingInterval = null;
+
+                // Stop any ongoing typing sound
+                 if (this.currentTypingSound) {
+                    try { this.currentTypingSound.stop(); } catch(e){}
+                    this.currentTypingSound = null;
+                 }
+
+                if (this.loadingScreen) {
+                    this.loadingScreen.classList.add('fade-out');
+
+                    // Use transitionend event for reliable removal
+                    const handleTransitionEnd = () => {
+                         if (this.loadingScreen && this.loadingScreen.parentNode) {
+                             this.loadingScreen.parentNode.removeChild(this.loadingScreen);
+                         }
+                         this.loadingScreen = null; // Nullify references
+                         this.loadingText = null;
+                         this.cursor = null;
+                         this.progressBar = null;
+
+                         this.isLoading = false; // Mark as not loading *after* removal
+
+                         if (typeof callback === 'function') {
+                             callback();
+                         }
+                         // Remove listener after execution
+                         if(this.loadingScreen) { // Check again in case it was removed elsewhere
+                            this.loadingScreen.removeEventListener('transitionend', handleTransitionEnd);
+                         }
+                    };
+
+                    // Add listener, fallback to timeout just in case
+                    this.loadingScreen.addEventListener('transitionend', handleTransitionEnd, { once: true });
+                    setTimeout(() => { // Fallback if transitionend doesn't fire
+                        if (this.isLoading) { // Only run fallback if still in loading state
+                            handleTransitionEnd();
+                         }
+                    }, 600); // 500ms fade + 100ms buffer
+
+                } else {
+                     // If screen doesn't exist, just reset state and run callback
+                     this.isLoading = false;
+                     if (typeof callback === 'function') {
+                         callback();
+                     }
+                }
+            }
+
+             playTypingSound() {
+                if (!this.audioCtx || this.audioCtx.state === 'suspended') {
+                     // Resume context if suspended (e.g., by browser policies)
+                     if(this.audioCtx && this.audioCtx.resume) this.audioCtx.resume();
+                     else return; // Cannot play sound
+                 }
+                 if (!this.audioCtx || this.audioCtx.state !== 'running') return; // Exit if context not running
+
+                 try {
+                     // Stop previous sound immediately if still playing
+                     if (this.currentTypingSound) {
+                        try { this.currentTypingSound.stop(); } catch(e){}
+                     }
+
+                     const oscillator = this.audioCtx.createOscillator();
+                     const gainNode = this.audioCtx.createGain();
+
+                     oscillator.connect(gainNode);
+                     gainNode.connect(this.audioCtx.destination);
+
+                     // Short, sharp 'tick' sound
+                     oscillator.type = 'triangle'; // Softer than square
+                     oscillator.frequency.setValueAtTime(1200 + Math.random() * 300, this.audioCtx.currentTime); // Higher pitch range
+                     gainNode.gain.setValueAtTime(0.04, this.audioCtx.currentTime); // Lower volume
+                     gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.05); // Faster decay
+
+                     oscillator.start(this.audioCtx.currentTime);
+                     oscillator.stop(this.audioCtx.currentTime + 0.05);
+                     this.currentTypingSound = oscillator; // Store reference
+
+                     // Clean up oscillator reference after it stops
+                     oscillator.onended = () => {
+                         if (this.currentTypingSound === oscillator) {
+                             this.currentTypingSound = null;
+                         }
+                     };
+
+                 } catch(e) {
+                     console.error("Typing sound error:", e);
+                      if (this.currentTypingSound) this.currentTypingSound = null;
+                 }
+             }
+
+
+            playLoadingSound() {
+                 if (!this.audioCtx || this.audioCtx.state === 'suspended') {
+                    if(this.audioCtx && this.audioCtx.resume) this.audioCtx.resume();
+                    else return;
+                 }
+                 if (!this.audioCtx || this.audioCtx.state !== 'running') return;
+
+                 try {
+                     const oscillator = this.audioCtx.createOscillator();
+                     const gainNode = this.audioCtx.createGain();
+                     oscillator.connect(gainNode);
+                     gainNode.connect(this.audioCtx.destination);
+
+                     // Simple beep sound
+                     oscillator.type = 'square';
+                     oscillator.frequency.setValueAtTime(440, this.audioCtx.currentTime);
+                     gainNode.gain.setValueAtTime(0.1, this.audioCtx.currentTime);
+                     gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.3); // Shorter beep
+
+                     oscillator.start();
+                     oscillator.stop(this.audioCtx.currentTime + 0.3);
+
+                     // Clean up context after sound plays
+                     setTimeout(() => { if (this.audioCtx && this.audioCtx.state !== 'closed') this.audioCtx.close().catch(e => console.error("Error closing audio context:", e)); }, 600);
+
+                 } catch (e) {
+                     console.error("Loading sound error:", e);
+                 }
+            }
+        }
+    </script>
+
+    <script>
+        // Page Manager for SPA
+        class ApproVideoPageManager {
+            constructor() {
+                this.transitionEffect = new OldSkoolTransitionEffect({
+                    typingSpeed: 60,       // Slightly faster typing
+                    loadingDuration: 1500, // Slightly shorter load time
+                    cursorBlinkRate: 500
+                });
+
+                this.currentPage = 'shelter'; // Default starting page
+                this.pageContentArea = document.getElementById('page-content-area');
+                this.headerBlinkElement = document.querySelector('.header .blink');
+                this.visitorCounterElement = document.querySelector('.hit-counter');
+
+                this.visitorCount = parseInt(localStorage.getItem('approvideo_visitor_count') || '13');
+
+                // Use the demo security system
+                this.securitySystem = new LatticeSecureData();
+
+                this.init();
+            }
+
+            init() {
+                this.bindIconClicks();
+                this.createStars(); // Create background stars
+                this.incrementVisitorCounter(); // Increment once on load
+                this.updateVisitorCounterDisplay(); // Display initial/updated count
+
+                // Load initial page content (without transition on first load)
+                const initialState = this.retrievePageState();
+                if (initialState && pageContent[initialState.currentPage]) {
+                    this.currentPage = initialState.currentPage;
+                    if (initialState.visitorCount) {
+                         // Use stored count if higher than default/incremented
+                        this.visitorCount = Math.max(this.visitorCount, initialState.visitorCount);
+                        this.updateVisitorCounterDisplay();
+                    }
+                }
+                this.updatePageUI(this.currentPage, false); // false = skip transition
+
+                 // Apply typewriter effect to main header after short delay
+                 setTimeout(() => this.applyHeaderTypewriter(), 500);
+
+                 // Keyboard commands
+                 this.initKeyboardCommands();
+
+                 // Show welcome message for first time visitors
+                 if (!localStorage.getItem('approvideo_hasVisitedBefore')) {
+                    localStorage.setItem('approvideo_hasVisitedBefore', 'true');
+                    setTimeout(() => this.showWelcomeMessage(), 2500); // Delay welcome message slightly
+                 } else {
+                     // Maybe show a returning visitor message briefly?
+                 }
+            }
+
+            createStars() {
+                const starsContainer = document.getElementById('starsContainer');
+                if (!starsContainer) return;
+                starsContainer.innerHTML = ''; // Clear existing stars if any
+                const numStars = 150; // Increase star count
+                const fragment = document.createDocumentFragment(); // Use fragment for performance
+
+                for (let i = 0; i < numStars; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.left = Math.random() * 100 + '%';
+                    // Vary size and speed slightly
+                    const size = Math.random() * 1.5 + 0.5; // Size between 0.5px and 2px
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.animationDelay = Math.random() * 5 + 's'; // Wider delay range
+                    star.style.animationDuration = (Math.random() * 1 + 1) + 's'; // Vary blink speed
+                    fragment.appendChild(star);
+                }
+                starsContainer.appendChild(fragment);
+            }
+
+            bindIconClicks() {
+                const icons = document.querySelectorAll('.icon');
+                icons.forEach(icon => {
+                    // Clone and replace to remove any old listeners
+                    const newIcon = icon.cloneNode(true);
+                    icon.parentNode.replaceChild(newIcon, icon);
+
+                    newIcon.addEventListener('click', (event) => {
+                        const pageId = newIcon.getAttribute('data-page');
+                        if (pageId && pageId !== this.currentPage && !this.transitionEffect.isLoading) {
+                             playRetroSound('interaction'); // Play click sound
+                            this.changePage(pageId);
+                        }
+                    });
+                     // Add hover sound effect
+                     newIcon.addEventListener('mouseenter', () => {
+                         if (!this.transitionEffect.isLoading) {
+                            // Play a subtle hover sound (optional)
+                            // playRetroSound('hover');
+                         }
+                     });
+                });
+            }
+
+            changePage(pageId) {
+                if (!pageContent[pageId]) {
+                    console.error(`Page '${pageId}' does not exist`);
+                    // Optionally show an error message to the user
+                    this.showSystemError(`ERROR: Page "${pageId}" not found.`);
+                    return;
+                }
+                if (this.transitionEffect.isLoading) {
+                     console.warn("Transition already in progress.");
+                     return; // Don't start a new transition if one is running
+                }
+
+                console.log(`Starting transition to: ${pageId}`);
+                // Use page title for loading text
+                const loadingText = `LOADING ${pageContent[pageId].title}...`;
+
+                this.transitionEffect.startTransition(() => {
+                    console.log(`Transition complete. Updating UI for: ${pageId}`);
+                    this.currentPage = pageId;
+                    this.updatePageUI(pageId, false); // Update UI after transition (false = skip nested transition)
+                    this.incrementVisitorCounter();
+                    this.storePageState(pageId);
+                    console.log(`%c[PAGE CHANGE] Navigated to: ${pageId.toUpperCase()}`, 'color: #00ff00; background: #000000; padding: 2px 5px;');
+                 }, loadingText); // Pass custom loading text
+            }
+
+            // Update UI elements (with option to skip transition for initial load)
+            updatePageUI(pageId, useTransition = true) {
+                 if (!pageContent[pageId]) return;
+
+                // Update active icon class
+                document.querySelectorAll('.icon').forEach(icon => {
+                    icon.classList.remove('active');
+                    if (icon.getAttribute('data-page') === pageId) {
+                        icon.classList.add('active');
+                    }
+                });
+
+                // Update header blink text
+                if (this.headerBlinkElement) {
+                    this.headerBlinkElement.innerHTML = `*** ${pageContent[pageId].title} ***`;
+                }
+
+                // Update main content area
+                if (this.pageContentArea) {
+                    // Simple fade out/in for content change effect
+                    this.pageContentArea.style.opacity = '0';
+                    setTimeout(() => {
+                        this.pageContentArea.innerHTML = pageContent[pageId].content;
+                         // Re-apply typewriter to specific elements if needed after content load
+                         this.applyContentEffects();
+                         this.pageContentArea.style.opacity = '1';
+                    }, 250); // Match half of a short fade transition time
+
+                 } else {
+                     console.error("Page content area not found!");
+                 }
+
+
+                // Update document title
+                document.title = `ApproVideo - ${pageContent[pageId].title}`;
+            }
+
+             // Apply effects to newly loaded content
+             applyContentEffects() {
+                 // Example: Apply typewriter to H3s within cards after a delay
+                 setTimeout(() => {
+                     const cardTitles = this.pageContentArea.querySelectorAll('.card h3');
+                     cardTitles.forEach((title, index) => {
+                         this.applyTypewriterEffect(title, 30, index * 150); // Slower speed, staggered start
+                     });
+                 }, 300); // Delay after content appears
+             }
+
+            // General typewriter effect function
+             applyTypewriterEffect(element, speed = 50, delay = 0) {
+                 if (!element) return;
+                 const originalText = element.textContent || '';
+                 if (!originalText) return; // Skip if no text
+
+                 element.textContent = ''; // Clear existing text
+                 let i = 0;
+                 let typingTimeout;
+
+                 function typeChar() {
+                     if (i < originalText.length) {
+                         element.textContent += originalText.charAt(i);
+                         i++;
+                         typingTimeout = setTimeout(typeChar, speed);
+                     }
+                 }
+
+                 // Start after specified delay
+                 setTimeout(typeChar, delay);
+             }
+
+             // Specific function for header typewriter effect
+             applyHeaderTypewriter() {
+                const headerElement = document.querySelector('.header h1');
+                if (headerElement) {
+                     this.applyTypewriterEffect(headerElement, 100); // Slower speed for header
+                 }
+             }
+
+
+            incrementVisitorCounter() {
+                this.visitorCount++;
+                localStorage.setItem('approvideo_visitor_count', this.visitorCount.toString());
+                 this.updateVisitorCounterDisplay(); // Update display immediately
+            }
+
+             updateVisitorCounterDisplay() {
+                 if (this.visitorCounterElement) {
+                    this.visitorCounterElement.innerText = this.visitorCount.toString().padStart(6, '0');
+                }
+             }
+
+
+            storePageState(pageId) {
+                const pageState = {
+                    currentPage: pageId,
+                    timestamp: new Date().getTime(),
+                    visitorCount: this.visitorCount
+                };
+                try {
+                    const encryptedState = this.securitySystem.encrypt(pageState);
+                    if (encryptedState) {
+                        localStorage.setItem('approvideo_state', encryptedState);
+                         // console.log("Page state securely stored (Demo)");
+                    } else {
+                         console.warn("Failed to encrypt page state.");
+                    }
+                } catch (e) {
+                     console.error("Error storing page state:", e);
+                 }
+            }
+
+            retrievePageState() {
+                try {
+                    const encryptedState = localStorage.getItem('approvideo_state');
+                    if (!encryptedState) return null;
+                    const decryptedState = this.securitySystem.decrypt(encryptedState);
+                    // Add basic validation
+                     if (decryptedState && typeof decryptedState === 'object' && decryptedState.currentPage) {
+                         console.log("Retrieved page state:", decryptedState);
+                         return decryptedState;
+                     } else {
+                         console.warn("Invalid or corrupted page state retrieved.");
+                         localStorage.removeItem('approvideo_state'); // Clear corrupted state
+                         return null;
+                     }
+                 } catch (e) {
+                     console.error("Failed to retrieve page state:", e);
+                     return null;
+                 }
+            }
+
+             // Initialize keyboard commands
+             initKeyboardCommands() {
+                 document.addEventListener('keydown', (event) => {
+                    // Allow key commands only when no modal is open and not typing in an input/textarea
+                    const activeElement = document.activeElement;
+                    const isTyping = activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA');
+                    const modalOpen = document.querySelector('.modal[style*="display: block"]');
+
+                    if (isTyping || modalOpen || this.transitionEffect.isLoading) {
+                         return; // Don't interfere with typing or modals or transitions
+                     }
+
+                     // F1 - Show help screen
+                     if (event.key === 'F1') {
+                         event.preventDefault();
+                         this.showHelpScreen();
+                     }
+                     // Number keys 1-6 for navigation
+                     else if (event.key >= '1' && event.key <= '6') {
+                         event.preventDefault();
+                         const pageIndex = parseInt(event.key) - 1;
+                         const pageIds = ['shelter', 'water', 'waste', 'energy', 'health', 'food'];
+                         if (pageIds[pageIndex] && pageIds[pageIndex] !== this.currentPage) {
+                            playRetroSound('interaction');
+                            this.changePage(pageIds[pageIndex]);
+                         }
+                     }
+                    // Ctrl+Alt+Del simulation for reset (use carefully!)
+                    else if (event.ctrlKey && event.altKey && event.key === 'Delete') {
+                         event.preventDefault();
+                         this.showResetConfirmation();
+                    }
+                 });
+             }
+
+             // Show help screen modal
+             showHelpScreen() {
+                 this.closeSystemModals(); // Close other system modals first
+                 const helpModal = document.createElement('div');
+                 helpModal.className = 'help-modal';
+                 helpModal.id = 'help-modal-instance';
+                 helpModal.style.width = '550px';
+
+                 helpModal.innerHTML = `
+                     <button class="modal-close" onclick="window.pageManager.closeSystemModals()">X</button>
+                     <h2>ApproVideo Help</h2>
+                     <p>Welcome to ApproVideo OS v1.0 [Build ${new Date().toISOString().substring(0, 10)}]</p>
+                     <p><strong>Navigation:</strong></p>
+                     <ul>
+                         <li>Click icons or press keys 1-6 to navigate sections.</li>
+                         <li>Use buttons within sections for more info/media.</li>
+                     </ul>
+                     <p><strong>Available Sections:</strong></p>
+                     <ul>
+                         <li>[1] 🏠 Shelter - Emergency & community shelter</li>
+                         <li>[2] 💧 Water - Purification & filtration</li>
+                         <li>[3] ♻️ Waste - Composting & creative reuse</li>
+                         <li>[4] 🔆 Energy - Renewable energy & efficient stoves</li>
+                         <li>[5] ❤️ Health - Public health & first aid</li>
+                         <li>[6] 🍴 Food - Urban farming & food preservation</li>
+                     </ul>
+                     <p style="text-align: center; color: #ffff00; margin-top: 15px;">Press F1 for Help | Ctrl+Alt+Del to Reset</p>
+                 `;
+                 document.body.appendChild(helpModal);
+                  playRetroSound('open');
+             }
+
+             // Show welcome message modal
+             showWelcomeMessage() {
+                 this.closeSystemModals();
+                 const welcomeModal = document.createElement('div');
+                 welcomeModal.className = 'help-modal'; // Re-use style
+                 welcomeModal.id = 'welcome-modal-instance';
+                 welcomeModal.style.width = '550px';
+
+                 welcomeModal.innerHTML = `
+                     <button class="modal-close" onclick="window.pageManager.closeSystemModals()">X</button>
+                     <h2>WELCOME TO HUB.APPROVIDEO.ORG</h2>
+                     <p style="text-align: center; margin-bottom: 15px;">*** APPROPRIATE TECHNOLOGY SOLUTIONS ***</p>
+                     <p>Explore DIY sustainable solutions across key areas. Click icons or press 1-6 to navigate.</p>
+                     <ul style="margin-top: 10px;">
+                         <li>🏠 Shelter</li>
+                         <li>💧 Water</li>
+                         <li>♻️ Waste</li>
+                         <li>🔆 Energy</li>
+                         <li>❤️ Health</li>
+                         <li>🍴 Food</li>
+                     </ul>
+                     <p style="text-align: center; color: #ffff00; margin-top: 15px;">PRESS F1 FOR HELP</p>
+                     <div style="text-align: center; margin-top: 15px;">
+                         <button class="btn" onclick="window.pageManager.closeSystemModals()">ENTER SITE <span class="blink">></span></button>
+                     </div>
+                 `;
+                 document.body.appendChild(welcomeModal);
+                 playRetroSound('open');
+             }
+
+            // Show system error modal (like a BSOD)
+             showSystemError(message = "A fatal exception OE has occurred at 0028:C0011E36.") {
+                 this.closeSystemModals();
+                 const errorModal = document.createElement('div');
+                 errorModal.className = 'system-error-modal';
+                 errorModal.id = 'error-modal-instance';
+                 errorModal.style.width = '600px';
+
+                 errorModal.innerHTML = `
+                     <h2>*** SYSTEM ERROR ***</h2>
+                     <p>${message}</p>
+                     <p style="margin-top: 20px;">* Press any key to restart the application simulation.</p>
+                     <p style="margin-top: 5px;">* Or click the button below.</p>
+                     <div style="text-align: center; margin-top: 25px;">
+                         <button class="btn" style="color:#fff; border-color:#fff;" onclick="window.location.reload()">REBOOT SIMULATION</button>
+                     </div>
+                 `;
+                 document.body.appendChild(errorModal);
+                 playRetroSound('error'); // Need an 'error' sound type
+             }
+
+             // Show reset confirmation
+             showResetConfirmation() {
+                this.closeSystemModals();
+                 const resetModal = document.createElement('div');
+                 resetModal.className = 'reset-modal'; // Style similarly to help
+                 resetModal.id = 'reset-modal-instance';
+                 resetModal.style.width = '400px';
+
+                 resetModal.innerHTML = `
+                     <button class="modal-close" onclick="window.pageManager.closeSystemModals()">X</button>
+                     <h2>Reset Simulation?</h2>
+                     <p>This will clear stored visitor count and state, then reload the page.</p>
+                     <p>Are you sure?</p>
+                     <div style="text-align: center; margin-top: 20px;">
+                          <button class="btn" style="border-color:#ff0000; color:#ff0000;" onclick="window.pageManager.performReset()">YES, RESET</button>
+                          <button class="btn" onclick="window.pageManager.closeSystemModals()">NO, CANCEL</button>
+                     </div>
+                 `;
+                 document.body.appendChild(resetModal);
+                 playRetroSound('open');
+             }
+
+            // Perform the reset action
+             performReset() {
+                 console.warn("Performing simulation reset...");
+                 localStorage.removeItem('approvideo_visitor_count');
+                 localStorage.removeItem('approvideo_state');
+                 localStorage.removeItem('approvideo_hasVisitedBefore');
+                 // Close the modal *before* reloading
+                 this.closeSystemModals();
+                 // Use transition before reload for effect
+                  this.transitionEffect.startTransition(() => {
+                      window.location.reload();
+                  }, "SYSTEM RESETTING...");
+             }
+
+
+             // Close any system-level modals (help, error, reset)
+             closeSystemModals() {
+                 const modals = document.querySelectorAll('#help-modal-instance, #error-modal-instance, #reset-modal-instance, #welcome-modal-instance');
+                 modals.forEach(modal => {
+                     if (modal && modal.parentNode) {
+                        modal.parentNode.removeChild(modal);
+                        playRetroSound('close');
+                     }
+                 });
+             }
+        }
+    </script>
+
+    <script>
+        // Global instance
+        window.pageManager = null;
+
+        // Initial loading simulation (runs before page manager)
+        function simulateInitialLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.innerHTML = 'BIOS Initializing...'; // More retro text
+            loadingDiv.style.position = 'fixed';
+            loadingDiv.style.top = '0';
+            loadingDiv.style.left = '0';
+            loadingDiv.style.width = '100%';
+            loadingDiv.style.height = '100%';
+            loadingDiv.style.backgroundColor = '#000000';
+            loadingDiv.style.color = '#00ff00';
+            loadingDiv.style.display = 'flex';
+            loadingDiv.style.justifyContent = 'center';
+            loadingDiv.style.alignItems = 'center';
+            loadingDiv.style.fontSize = '24px';
+            loadingDiv.style.fontFamily = 'Courier New, monospace';
+            loadingDiv.style.zIndex = '9999';
+            loadingDiv.style.animation = 'blink 1s infinite';
+            document.body.appendChild(loadingDiv);
+
+            // Remove after a short delay, Page Manager init will take over
+            setTimeout(() => {
+                 if (loadingDiv.parentNode) {
+                     loadingDiv.parentNode.removeChild(loadingDiv);
+                 }
+             }, 1000); // Shorter initial "BIOS" load
+        }
+
+         // Run initial load simulation immediately
+         simulateInitialLoading();
+
+
+        // Wait for DOM to be fully loaded to initialize the Page Manager
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("%cApproVideo OldSkool SPA Initializing...", "color: #00ff00; background: #000000; padding: 5px; font-size: 14px;");
+
+             // Initialize page manager slightly delayed to allow "BIOS" screen
+             setTimeout(() => {
+                 try {
+                     window.pageManager = new ApproVideoPageManager();
+                     console.log("ApproVideoPageManager Initialized.");
+                 } catch (e) {
+                     console.error("Failed to initialize ApproVideoPageManager:", e);
+                     // Show a fallback error message if initialization fails
+                     document.body.innerHTML = '<div style="color:red; background:black; padding:20px; font-family:monospace;">FATAL ERROR: Application failed to initialize. Please refresh or contact support.</div>';
+                 }
+            }, 1100); // Start after the initial load screen hides
+
+        });
+    </script>
+
+</body>
+</html>
